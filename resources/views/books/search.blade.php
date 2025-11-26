@@ -15,6 +15,23 @@
                 <a href="{{ url('/') }}" class="px-3 py-1 border rounded">Home</a>
             </header>
 
+            <!-- Flash messages (success / error / validation) -->
+            @if(session('success'))
+                <div class="mt-4 p-3 bg-green-50 border border-green-200 text-green-800 rounded">{{ session('success') }}</div>
+            @endif
+            @if(session('error'))
+                <div class="mt-4 p-3 bg-red-50 border border-red-200 text-red-800 rounded">{{ session('error') }}</div>
+            @endif
+            @if($errors->any())
+                <div class="mt-4 p-3 bg-red-50 border border-red-200 text-red-800 rounded">
+                    <ul class="list-disc pl-5">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <form method="GET" action="{{ route('books.search') }}" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Search query</label>
@@ -37,7 +54,43 @@
                                         <div class="font-semibold">{{ $book->Title }}</div>
                                         <div class="text-sm text-gray-600 dark:text-gray-300">Author: {{ $book->authors->pluck('Name')->join(', ') ?? '—' }}</div>
                                         <div class="text-sm text-gray-600 dark:text-gray-300">ISBN: {{ $book->Isbn ?? '—' }}</div>
+
+                                        @if($book->loans && $book->loans->count() > 0)
+                                            <div class="mt-2">
+                                                @foreach($book->loans as $loan)
+                                                    @php
+                                                        $dateIn = $loan->Date_in ?? null;
+                                                        $checkedOut = $dateIn === null || $dateIn === '' || $dateIn === '0000-00-00';
+                                                    @endphp
+                                                    <div class="mt-2 p-3 rounded-lg text-sm bg-blue-50 dark:bg-blue-900/40 border border-blue-300 dark:border-blue-600">
+                                                        <div>
+                                                            <span class="font-medium">Status:</span>
+                                                            @if($checkedOut)
+                                                                <span class="text-yellow-600 dark:text-yellow-400">Checked Out</span>
+                                                            @else
+                                                                <span class="text-green-600 dark:text-green-400">Checked In</span>
+                                                            @endif
+                                                        </div>
+                                                        <div>
+                                                            <span class="font-medium">Card ID:</span> {{ $loan->Card_id }}
+                                                        </div>
+                                                        <div>
+                                                            <span class="font-medium">Borrower:</span> {{ $loan->borrower->Bname ?? '—' }}
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @endif
                                         
+                                        <!-- Inline checkout form: prefill ISBN, ask for Card ID -->
+                                        <div class="mt-3">
+                                            <form method="POST" action="{{ route('books.checkout') }}" class="flex gap-2 items-center">
+                                                @csrf
+                                                <input type="hidden" name="isbn" value="{{ $book->Isbn }}" />
+                                                <input name="card_id" type="text" placeholder="Card ID" class="px-2 py-1 rounded border text-sm" aria-label="Card ID" />
+                                                <button type="submit" class="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-500">Checkout</button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </li>

@@ -23,7 +23,7 @@ class BookController extends Controller
                 ->orWhereHas('authors', function ($query) use ($q) {
                     $query->where('name', 'like', "%{$q}%");
                 })
-                ->with('authors')
+                ->with(['authors', 'loans.borrower'])
                 ->orderBy('title')
                 ->paginate(10);
         }

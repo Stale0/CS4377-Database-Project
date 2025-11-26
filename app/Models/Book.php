@@ -18,4 +18,9 @@ class Book extends Model
     {
         return $this->belongsToMany(Author::class, 'Book_authors', 'Isbn', 'Author_id', 'Isbn', 'Author_id');
     }
+
+    public function loans()
+    {
+        return $this->hasMany(BookLoan::class, 'Isbn', 'Isbn');
+    }
 }
