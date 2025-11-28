@@ -20,6 +20,11 @@ class Borrower extends Model
         'Phone'
     ];
 
+    protected $casts = [
+        'Phone' => 'integer',
+        'Ssn' => 'integer',
+    ];
+
     public function loans()
     {
         return $this->hasMany(BookLoan::class, 'Card_id', 'Card_id');

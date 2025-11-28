@@ -16,6 +16,7 @@
         <div class="flex gap-2">
             <a href="{{ url('/book-search') }}" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500">Search Books</a>
             <a href="{{ url('/book-check-in') }}" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500">Check-in Books</a>
+            <a href="{{ route('borrowers.create') }}" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-500">Create Borrower</a>
             <a href="{{ url('/') }}" class="px-4 py-2 border rounded">Home</a>
         </div>
     </div>
