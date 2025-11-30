@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BookLoanController;
 use App\Http\Controllers\BorrowerController;
+use App\Http\Controllers\FineController;
+use App\Http\Controllers\DateSimulatorController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,3 +20,13 @@ Route::post('/book-check-in', [BookLoanController::class, 'processCheckin'])->na
 // Borrower creation
 Route::get('/borrowers/create', [BorrowerController::class, 'create'])->name('borrowers.create');
 Route::post('/borrowers', [BorrowerController::class, 'store'])->name('borrowers.store');
+
+// Fines management
+Route::get('/fines', [FineController::class, 'finesForm'])->name('fines.manage');
+Route::post('/fines/pay', [FineController::class, 'payFines'])->name('fines.pay');
+
+// Date Simulator
+Route::get('/date/current', [DateSimulatorController::class, 'getCurrent'])->name('date.current');
+Route::post('/date/set', [DateSimulatorController::class, 'setDate'])->name('date.set');
+Route::post('/date/reset', [DateSimulatorController::class, 'resetDate'])->name('date.reset');
+
