@@ -18,6 +18,11 @@ class Fine extends Model
         'Paid'
     ];
 
+    protected $casts = [
+        'Fine_amt' => 'float',
+        'Paid' => 'boolean',
+    ];
+
     public function loan()
     {
         return $this->belongsTo(BookLoan::class, 'Loan_id', 'Loan_id');

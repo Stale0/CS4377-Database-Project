@@ -9,6 +9,7 @@ use App\Models\BookLoan;
 use App\Models\Borrower;
 use App\Models\Fine;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Session;
 
 class BookLoanController extends Controller
 {
@@ -81,8 +82,16 @@ class BookLoanController extends Controller
                 $maxId = DB::table('book_loans')->max('Loan_id');
                 $nextId = ($maxId !== null) ? ((int)$maxId + 1) : 1;
 
-                $dateOut = Carbon::today()->format('Y-m-d');
-                $dueDate = Carbon::today()->addDays(14)->format('Y-m-d');
+                // Use simulated date from session if available
+                $simulated = Session::get('simulated_date');
+                if ($simulated) {
+                    $current = Carbon::createFromFormat('Y-m-d', $simulated)->startOfDay();
+                } else {
+                    $current = Carbon::today();
+                }
+
+                $dateOut = $current->format('Y-m-d');
+                $dueDate = $current->copy()->addDays(14)->format('Y-m-d');
 
                 $loan = BookLoan::create([
                     'Loan_id' => $nextId,
@@ -175,7 +184,12 @@ class BookLoanController extends Controller
 
         try {
             $updated = DB::transaction(function () use ($loanIds) {
-                $today = Carbon::today()->format('Y-m-d');
+                $simulated = Session::get('simulated_date');
+                if ($simulated) {
+                    $today = Carbon::createFromFormat('Y-m-d', $simulated)->format('Y-m-d');
+                } else {
+                    $today = Carbon::today()->format('Y-m-d');
+                }
                 $count = 0;
                 foreach ($loanIds as $id) {
                     $loan = BookLoan::where('Loan_id', $id)
