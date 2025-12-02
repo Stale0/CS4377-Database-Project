@@ -50,29 +50,29 @@
                             </div>
 
                             <!-- Individual fines table -->
-                            <table class="w-full text-sm mb-4">
+                           <table class="w-full text-sm mb-4 table-fixed">
                                 <thead class="border-b">
                                     <tr>
-                                        <th class="text-left p-2">ISBN</th>
-                                        <th class="text-left p-2">Due Date</th>
-                                        <th class="text-left p-2">Returned</th>
-                                        <th class="text-right p-2">Fine Amount</th>
+                                        <th class="text-center p-2">ISBN</th>
+                                        <th class="text-center p-2">Due Date</th>
+                                        <th class="text-center p-2">Returned</th>
+                                        <th class="text-center p-2">Fine Amount</th>
                                         <th class="text-center p-2">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($borrower['fines'] as $fine)
                                         <tr class="border-b dark:border-gray-600">
-                                            <td class="p-2">{{ $fine->Isbn }}</td>
-                                            <td class="p-2">{{ $fine->Due_date }}</td>
-                                            <td class="p-2">
+                                            <td class="text-center p-2">{{ $fine->Isbn }}</td>
+                                            <td class="text-center p-2">{{ $fine->Due_date }}</td>
+                                            <td class="text-center p-2">
                                                 @if($fine->Date_in && $fine->Date_in !== '0000-00-00')
                                                     {{ $fine->Date_in }}
                                                 @else
                                                     <span class="text-red-600 dark:text-red-400">Still Out</span>
                                                 @endif
                                             </td>
-                                            <td class="p-2 text-right font-mono">${{ number_format($fine->Fine_amt, 2) }}</td>
+                                            <td class="p-2 text-center font-mono">${{ number_format($fine->Fine_amt, 2) }}</td>
                                             <td class="p-2 text-center">
                                                 @if($fine->Paid)
                                                     <span class="px-2 py-1 bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300 rounded text-xs">Paid</span>
@@ -83,7 +83,7 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
-                            </table>
+                        </table>
 
                             <!-- Pay button (only if has unpaid fines and all books returned) -->
                             @php
