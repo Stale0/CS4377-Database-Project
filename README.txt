@@ -17,7 +17,7 @@ prerequisites
    Go into the project folder and look for .env.example.
    Rename this file to .env and save
    open up command prompt and cd into the repo folder
-   NOTE- Ensure both apache and mysql modules are active in xampp or else you will get errors starting the server/connectiong to sql database
+   NOTE- Ensure both apache and mysql modules are active in xampp or else you will get errors starting the server/connecting to sql database
    run the following commands
        composer install
        npm install && npm run build
